@@ -1,0 +1,111 @@
+/* =========================
+   OVERLAY
+========================= */
+.toast-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================
+   TOAST BOX
+========================= */
+.toast-box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 220px;
+    animation: popup 0.3s ease;
+}
+
+/* TEXT */
+.toast-box p {
+    margin: 0;
+    font-weight: 600;
+}
+
+/* =========================
+   ICON (TICK / CROSS BASE)
+========================= */
+.tick {
+    width: 70px;
+    height: 70px;
+    border: 4px solid;
+    border-radius: 50%;
+    position: relative;
+}
+
+/* Default animation shape */
+.tick::after {
+    content: "";
+    position: absolute;
+    left: 22px;
+    top: 12px;
+    width: 18px;
+    height: 35px;
+    border-right: 4px solid;
+    border-bottom: 4px solid;
+    transform: rotate(45deg) scale(0);
+    animation: tick 0.4s ease forwards 0.2s;
+}
+
+/* =========================
+   SUCCESS (GREEN)
+========================= */
+.toast-success .tick {
+    border-color: #28a745;
+}
+
+.toast-success .tick::after {
+    border-color: #28a745;
+}
+
+.toast-success p {
+    color: #28a745;
+}
+
+/* =========================
+   ERROR (RED)
+========================= */
+.toast-error .tick {
+    border-color: #dc3545;
+}
+
+.toast-error .tick::after {
+    border-color: #dc3545;
+}
+
+.toast-error p {
+    color: #dc3545;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes tick {
+    to {
+        transform: rotate(45deg) scale(1);
+    }
+}
+
+@keyframes popup {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
