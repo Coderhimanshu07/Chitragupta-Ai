@@ -112,7 +112,7 @@ function Chat() {
     if (!active || active.messages.length === 0) {
       try {
         const titleRes = await axios.post(
-          "http://localhost:5000/generate-title",
+          `${import.meta.env.VITE_API_URL}/generate-title`,
           { message: input }
         );
         newTitle = titleRes.data.title;
@@ -134,7 +134,7 @@ function Chat() {
     );
 
     const res = await axios.post(
-      "http://localhost:5000/chat",
+      `${import.meta.env.VITE_API_URL}/chat`,
       { message: input }
     );
 
