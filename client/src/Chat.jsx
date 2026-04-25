@@ -42,15 +42,21 @@ function Chat() {
     setSidebarOpen(false);
   };
 
-  // ✅ Delete Chat (🔥 UPDATED)
-  const deleteCurrentChat = () => {
-    if (!currentChat) return;
-    setChats(prev => prev.filter(chat => chat.id !== currentChat));
-    setCurrentChat(null);
+  // ✅ Delete Chat by ID
+  const deleteChatById = (id) => {
+    setChats(prev => prev.filter(chat => chat.id !== id));
+    if (currentChat === id) {
+      setCurrentChat(null);
+    }
 
     // 🔥 SHOW DELETE TOAST
     setShowDeleteToast(true);
     setTimeout(() => setShowDeleteToast(false), 2000);
+  };
+
+  // ✅ Delete Chat (🔥 UPDATED)
+  const deleteCurrentChat = () => {
+    if (currentChat) deleteChatById(currentChat);
   };
 
   // ✅ Clear All
@@ -177,40 +183,48 @@ function Chat() {
         currentChat={currentChat}
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
+        deleteChatById={deleteChatById}
+        onReport={handleReport}
       />
 
-      <div className="main d-flex flex-column min-vh-100">
+      <div className="main d-flex flex-column">
 
         {/* HEADER */}
-        <div className="header border-bottom bg-white sticky-top">
-          <div className="container-fluid py-2">
-            <div className="d-flex align-items-center flex-wrap">
+        <div className="header">
+          <div className="container-fluid py-2 py-md-1">
+            <div className="d-flex align-items-center w-100 justify-content-between">
 
               {/* LEFT */}
-              <div className="d-flex align-items-center gap-3">
+              <div className="d-flex align-items-center gap-2 gap-md-3">
+                {/* Hamburger - mobile only */}
                 <button
-                  className="btn btn-light d-md-none"
+                  className="btn btn-light d-lg-none p-2"
                   onClick={() => setSidebarOpen(true)}
+                  style={{ marginRight: 8 }}
+                  aria-label="Open sidebar"
                 >
                   <FaBars />
                 </button>
 
                 <div className="lh-sm">
-                  <h5 className="m-0 fw-bold text-danger">
+                  <h5 className="m-0 fw-bold text-danger mb-0">
                     चित्रGupt
                   </h5>
-                  <small className="text-muted">
+                  <small className="text-muted d-none d-sm-inline">
                     India's First Leading AI
                   </small>
                 </div>
               </div>
 
               {/* RIGHT */}
-              <div className="d-flex align-items-center gap-3 ms-auto flex-wrap">
+              <div className="d-flex align-items-center gap-2 ms-auto">
 
                 {currentChat && (
-                  <div className="text-dark fw-semibold ms-3 border-start ps-3 d-none d-md-block">
-                    {currentTitle}
+                  <div className="text-dark fw-semibold border-start ps-2 ps-md-3 d-none d-sm-block">
+                    <span className="d-none d-md-inline">{currentTitle}</span>
+                    <span className="d-md-none text-truncate" style={{ maxWidth: "100px" }}>
+                      {currentTitle}
+                    </span>
                   </div>
                 )}
 
@@ -225,7 +239,7 @@ function Chat() {
         </div>
 
         {/* CHAT */}
-        <div className="chatWrapper d-flex flex-column flex-grow-1">
+        <div className="chatWrapper d-flex flex-column">
           <div className="chatMessages">
             {activeChat?.messages.map((msg, i) => (
               <div
@@ -256,17 +270,14 @@ function Chat() {
               placeholder="Ask to चित्रGupt ..."
             />
 
-            <button
-              className="bg-primary text-white"
-              onClick={sendMessage}
-            >
+            <button onClick={sendMessage}>
               Send
             </button>
           </div>
 
         </div>
 
-        <div className="bg-light border-top py-2 text-center small">
+        <div className="footer">
           Copyright © 2026 | Made with ❤️ by <strong>Coderhimanshu</strong>
         </div>
 

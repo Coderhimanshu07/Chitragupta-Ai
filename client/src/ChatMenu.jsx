@@ -36,13 +36,19 @@ function ChatMenu({ deleteCurrentChat, onReport, isReportEnabled }) {
 
                     <button
                         className="dropdown-item d-flex align-items-center gap-2 text-danger"
-                        onClick={deleteCurrentChat}
+                        onClick={() => {
+                            deleteCurrentChat();
+                            setOpen(false);
+                        }}
                     >
                         <FaTrash /> Delete Chat
                     </button>
 
                     <button
-                        onClick={onReport}
+                        onClick={() => {
+                            onReport();
+                            setOpen(false);
+                        }}
                         disabled={!isReportEnabled}
                         className={`dropdown-item d-flex align-items-center gap-2 ${isReportEnabled ? "text-warning" : "text-muted"
                             }`}
