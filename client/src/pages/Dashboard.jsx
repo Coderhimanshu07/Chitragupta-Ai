@@ -106,6 +106,15 @@ export default function Dashboard() {
       setTempChat(null);
       navigate("/");
     }
+
+    /* Turning temp mode ON in the middle of a saved chat must detach from
+       its history immediately. Spin up a fresh local chat and open it, so
+       the ongoing conversation does not keep flowing with the normal one. */
+    if (next && chatId && isRemoteId(chatId)) {
+      const id = `temp-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      setTempChat({ id, title: "New Chat", messages: [] });
+      navigate(`/c/${id}`);
+    }
   };
 
   const flashToast = useCallback((message, type = "success") => {
