@@ -24,12 +24,11 @@ export function AuthProvider({ children }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
+  const signInWithGoogle = async () =>
+    supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: window.location.origin }
     });
-  };
 
   const signInWithEmail = (email, password) =>
     supabase.auth.signInWithPassword({ email, password });
