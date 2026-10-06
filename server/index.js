@@ -169,8 +169,22 @@ app.post("/chat", requireAuth, rateLimit, async (req, res) => {
   } catch (error) {
     console.error(error);
 
+    /* Surface the provider's reason so the client can show exactly why
+       the request failed (wrong key, rate limit, model, etc.) instead of
+       a generic 500 that hides the real problem. Error payloads from
+       Groq never include the API key itself. */
+    const provider =
+      error?.error?.message || error?.message || error?.status || "unknown";
+    const detail =
+      typeof provider === "number"
+        ? `HTTP ${provider}`
+        : typeof provider === "string" && provider.length > 0
+          ? provider
+          : "unknown";
+
     res.status(500).json({
-      error: "Something went wrong"
+      error: "Something went wrong",
+      detail
     });
   }
 });

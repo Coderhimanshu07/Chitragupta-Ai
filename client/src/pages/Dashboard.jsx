@@ -56,7 +56,9 @@ function describeError(err) {
   }
   if (status === 404) return "⚠️ Endpoint not found (404). Is the server code up to date?";
   if (status >= 500) {
-    return `⚠️ Server error (${status}): ${serverMsg || "check the server terminal for details"}`;
+    return `⚠️ Server error (${status}): ${
+      data?.error || "check the server terminal for details"
+    }${data?.detail ? ` — ${data.detail}` : ""}`;
   }
 
   return `⚠️ Request failed (${status})${serverMsg ? `: ${serverMsg}` : ""}`;
