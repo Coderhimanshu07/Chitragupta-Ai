@@ -1,0 +1,308 @@
+/* The document itself cannot scroll - html/body/#root are `overflow: hidden`
+   because the dashboard runs its own scroll container. So settings has to be
+   its own scroll frame, otherwise tall content is clipped with no way to
+   reach the bottom. */
+.setPage {
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  background: var(--bg-app);
+  color: var(--text-main);
+}
+
+.setHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 12, 21, 0.82);
+  backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.setHeaderTitle {
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.setMain {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 30px 18px 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Intro ---------- */
+
+.setIntro {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.setAvatarWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.setIntro h1 {
+  font-size: 1.4rem;
+  font-weight: 750;
+  margin: 0 0 5px;
+}
+
+.setIntro p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 0;
+  word-break: break-all;
+}
+
+/* ---------- Card ---------- */
+
+.setCard {
+  padding: 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-sidebar);
+  box-shadow: var(--shadow-sm);
+}
+
+.setCardHead {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.setCardIcon {
+  font-size: 1rem;
+  color: var(--accent-text);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.setCard h2,
+.setPlainHead {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 3px;
+}
+
+.setPlainHead {
+  margin-bottom: 13px;
+}
+
+.setCardHead p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ---------- Form ---------- */
+
+.setForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.setForm input {
+  flex: 1 1 190px;
+  min-width: 0;
+  padding: 11px 14px;
+  border-radius: 11px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-input);
+  color: var(--text-main);
+  /* 16px prevents iOS zoom-on-focus */
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.setForm input:focus {
+  border-color: var(--accent);
+  box-shadow: var(--glow-accent);
+}
+
+.setForm input::placeholder {
+  color: var(--text-muted);
+}
+
+.setBtn {
+  padding: 11px 22px;
+  border-radius: 11px;
+  border: 0;
+  background: linear-gradient(135deg, #ce3c49, #7a1421);
+  color: #fff;
+  font-weight: 650;
+  font-size: 0.88rem;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+.setBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.setBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.setBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Feedback ---------- */
+
+.setBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.setBanner span {
+  min-width: 0;
+  word-break: break-word;
+}
+
+.setBanner svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.setBanner.ok {
+  background: rgba(46, 230, 168, 0.1);
+  border: 1px solid rgba(46, 230, 168, 0.32);
+  color: var(--success);
+}
+
+.setBanner.err {
+  background: rgba(255, 92, 122, 0.1);
+  border: 1px solid rgba(255, 92, 122, 0.32);
+  color: var(--danger);
+}
+
+.setNote {
+  padding: 11px 13px;
+  border-radius: 10px;
+  background: var(--bg-input);
+  border: 1px dashed var(--border-strong);
+  font-size: 0.83rem;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.setNote a {
+  color: var(--accent-text);
+}
+
+/* ---------- Metadata ---------- */
+
+.setMeta {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.setMeta > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: baseline;
+}
+
+.setMeta dt {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  flex-shrink: 0;
+}
+
+.setMeta dd {
+  margin: 0;
+  font-size: 0.83rem;
+  text-align: right;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.setMono {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.74rem;
+  color: var(--text-soft);
+}
+
+/* ---------- Sign out ---------- */
+
+.setSignOut {
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 92, 122, 0.34);
+  background: rgba(255, 92, 122, 0.08);
+  color: var(--danger);
+  font-weight: 650;
+  font-size: 0.88rem;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  transition: background 0.18s var(--ease);
+}
+
+.setSignOut:hover {
+  background: rgba(255, 92, 122, 0.16);
+}
+
+@media (max-width: 640px) {
+  .setMain {
+    padding: 22px 13px 56px;
+  }
+
+  .setCard {
+    padding: 15px;
+  }
+
+  .setBtn {
+    width: 100%;
+  }
+
+  .setMeta > div {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .setMeta dd {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .setBtn:hover:not(:disabled) {
+    transform: none;
+  }
+}

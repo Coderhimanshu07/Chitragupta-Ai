@@ -1,168 +1,157 @@
-import logo from "./assets/logo.png";
-import { FaPlus, FaTrash, FaRegCommentAlt, FaFlag } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaPlus, FaTrash, FaRegCommentAlt } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { useState, useRef, useEffect } from "react";
+import { useAuth } from "./AuthContext";
+import { displayName } from "./lib/user";
+import { AvatarCircle } from "./components/UserAvatar";
+import logo from "./assets/logo.png";
 
-function SidebarMenu({ onDelete, onReport }) {
-    const [open, setOpen] = useState(false);
-    const menuRef = useRef(null);
+function ItemMenu({ onDelete }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setOpen(false);
-            }
-        };
+  useEffect(() => {
+    if (!open) return;
 
-        if (open) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [open]);
+    const onDown = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
 
-    return (
-        <div className="position-relative ms-auto" ref={menuRef}>
-            <button
-                className="btn btn-sm text-light p-0 border-0 d-flex align-items-center justify-content-center"
-                style={{ width: '24px', height: '24px', opacity: 0.7 }}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setOpen(!open);
-                }}
-            >
-                <BsThreeDotsVertical />
-            </button>
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [open]);
 
-            {open && (
-                <div className="sidebar-dropdown">
-                    <button
-                        className="sidebar-dropdown-item text-danger"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete();
-                            setOpen(false);
-                        }}
-                    >
-                        <FaTrash size={12} /> Delete Chat
-                    </button>
+  return (
+    <div className="itemMenuWrap" ref={ref}>
+      <button
+        className="itemMenuBtn"
+        aria-label="Chat options"
+        aria-expanded={open}
+        onClick={(e) => {
+          e.stopPropagation();
+          setOpen((o) => !o);
+        }}
+      >
+        <BsThreeDotsVertical />
+      </button>
 
-                    <button
-                        className="sidebar-dropdown-item text-warning"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onReport();
-                            setOpen(false);
-                        }}
-                    >
-                        <FaFlag size={12} /> Report
-                    </button>
-                </div>
-            )}
+      {open && (
+        <div className="sidebar-dropdown">
+          <button
+            className="sidebar-dropdown-item text-danger"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+              setOpen(false);
+            }}
+          >
+            <FaTrash size={12} /> Delete chat
+          </button>
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
-function Sidebar({
-    chats,
-    newChat,
-    setCurrentChat,
-    clearAllChats,
-    currentChat,
-    sidebarOpen,
-    setSidebarOpen,
-    deleteChatById,
-    onReport
+export default function Sidebar({
+  chats,
+  newChat,
+  setCurrentChat,
+  clearAllChats,
+  currentChat,
+  sidebarOpen,
+  setSidebarOpen,
+  deleteChatById,
+  loading = false
 }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuth();
 
-    return (
+  const go = (fn) => {
+    fn();
+    setSidebarOpen(false);
+  };
 
-        <>
-            {/* 🔥 OVERLAY */}
-            {sidebarOpen && (
+  return (
+    <>
+      {sidebarOpen && (
+        <div className="sidebarOverlay" onClick={() => setSidebarOpen(false)} />
+      )}
+
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <div className="sideHead">
+          <img className="sideLogo" src={logo} alt="चित्रGupt" />
+
+          <button
+            className="sideClose"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
+          >
+            ✕
+          </button>
+        </div>
+
+        <button className="newChatBtn" onClick={() => go(newChat)}>
+          <FaPlus size={14} /> New chat
+        </button>
+
+        <div className="historyList">
+          {/* Don't claim "no chats yet" before the request has answered -
+              that reads as a failure to a brand new user. */}
+          {loading ? (
+            <p className="historyEmpty">Loading chats…</p>
+          ) : chats.length === 0 ? (
+            <p className="historyEmpty">No chats yet</p>
+          ) : (
+            chats.map((chat) => {
+              const active = currentChat === chat.id;
+
+              return (
                 <div
-                    className="sidebarOverlay"
-                    onClick={() => setSidebarOpen(false)}
-                />
-            )}
-
-            <div className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-
-                {/* 🔥 HEADER (logo + cut button) */}
-                <div className="d-flex justify-content-between align-items-center mb-3">
-
-                    <img src={logo} alt="logo" height="45" className="img-fluid" style={{ maxHeight: '45px' }} />
-
-                    {/* 🔥 CUT BUTTON - visible on mobile */}
-                    <button
-                        className="btn d-lg-none border-0 text-white fs-5 p-1"
-                        onClick={() => setSidebarOpen(false)}
-                        aria-label="Close sidebar"
-                    >
-                        ✕
-                    </button>
-
-                </div>
-
-                <button
-                    className="newChatBtn"
-                    onClick={() => {
-                        newChat();
-                        setSidebarOpen(false);
-                    }}
+                  key={chat.id}
+                  className={`historyItem ${active ? "activeChat" : ""}`}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => go(() => setCurrentChat(chat.id))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      go(() => setCurrentChat(chat.id));
+                    }
+                  }}
                 >
-                    <FaPlus size={14} /> New Chat
-                </button>
+                  <FaRegCommentAlt size={14} className="flex-shrink-0" />
+                  <span title={chat.title}>{chat.title}</span>
 
-                <div className="historyList">
-
-                    {chats.length === 0 ? (
-                        <div className="text-muted small text-center py-3">
-                            No chats yet
-                        </div>
-                    ) : (
-                        chats.map(chat => (
-
-                            <div
-                                key={chat.id}
-                                className={`historyItem ${currentChat === chat.id ? "activeChat" : ""}`}
-                                onClick={() => {
-                                    setCurrentChat(chat.id);
-                                    setSidebarOpen(false);
-                                }}
-                            >
-                                <FaRegCommentAlt size={14} className="flex-shrink-0" />
-                                <span>{chat.title}</span>
-                                {currentChat === chat.id && (
-                                    <SidebarMenu 
-                                        onDelete={() => deleteChatById(chat.id)}
-                                        onReport={onReport}
-                                    />
-                                )}
-                            </div>
-
-                        ))
-                    )}
-
+                  {active && (
+                    <ItemMenu onDelete={() => deleteChatById(chat.id)} />
+                  )}
                 </div>
+              );
+            })
+          )}
+        </div>
 
-                <div className="mt-auto pt-2">
+        <div className="sideFoot">
+          <button
+            className={`sideLink ${location.pathname === "/settings" ? "on" : ""}`}
+            onClick={() => go(() => navigate("/settings"))}
+            title="Account settings"
+            aria-label="Account settings"
+          >
+            <AvatarCircle user={user} size="sm" />
+            <span className="sideLinkName">{displayName(user)}</span>
+          </button>
 
-                    <button
-                        className="clearBtn"
-                        onClick={() => {
-                            clearAllChats();
-                            setSidebarOpen(false);
-                        }}
-                    >
-                        <FaTrash size={14} /> Clear All Chats
-                    </button>
-
-                </div>
-
-            </div>
-        </>
-
-    );
+          {chats.length > 0 && (
+            <button className="clearBtn" onClick={() => go(clearAllChats)}>
+              <FaTrash size={14} /> Clear all chats
+            </button>
+          )}
+        </div>
+      </aside>
+    </>
+  );
 }
-
-export default Sidebar;

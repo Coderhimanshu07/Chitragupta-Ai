@@ -15,23 +15,25 @@
    TOAST BOX
 ========================= */
 .toast-box {
-    background: #fff;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
     padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 10px;
     min-width: 220px;
-    animation: popup 0.3s ease;
+    animation: popup 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* TEXT */
 .toast-box p {
     margin: 0;
     font-weight: 600;
+    color: var(--text-main);
 }
 
 /* =========================
@@ -63,30 +65,30 @@
    SUCCESS (GREEN)
 ========================= */
 .toast-success .tick {
-    border-color: #28a745;
+    border-color: var(--success);
 }
 
 .toast-success .tick::after {
-    border-color: #28a745;
+    border-color: var(--success);
 }
 
 .toast-success p {
-    color: #28a745;
+    color: var(--success);
 }
 
 /* =========================
    ERROR (RED)
 ========================= */
 .toast-error .tick {
-    border-color: #dc3545;
+    border-color: var(--danger);
 }
 
 .toast-error .tick::after {
-    border-color: #dc3545;
+    border-color: var(--danger);
 }
 
 .toast-error p {
-    color: #dc3545;
+    color: var(--danger);
 }
 
 /* =========================
