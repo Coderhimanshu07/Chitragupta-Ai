@@ -8,6 +8,7 @@ import { useAuth } from "../AuthContext";
 import { supabase } from "../supabase";
 import { displayName } from "../lib/user";
 import { FaBars, FaRedo, FaCommentSlash } from "react-icons/fa";
+import BrandLogo from "../components/BrandLogo";
 import "./dashboard.css";
 
 const TEMP_KEY = "cg-temp-mode";
@@ -429,7 +430,9 @@ export default function Dashboard() {
           <div className="dashThread">
             {messages.length === 0 ? (
               <div className="dashEmpty">
-                <div className="dashEmptyBadge">✦</div>
+                <div className="dashEmptyBadge">
+                  <BrandLogo />
+                </div>
                 <h1>{tempMode ? "Temporary chat active" : "How can I help you today?"}</h1>
                 <p>
                   {tempMode

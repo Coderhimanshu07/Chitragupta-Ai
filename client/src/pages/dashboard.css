@@ -242,16 +242,16 @@
 }
 
 .dashEmptyBadge {
-  width: 62px;
-  height: 62px;
+  width: 68px;
+  height: 68px;
   margin: 0 auto 20px;
   display: grid;
   place-items: center;
-  border-radius: 20px;
-  font-size: 27px;
-  color: #fff;
-  background: linear-gradient(135deg, #ce3c49, #a81020);
-  box-shadow: 0 10px 34px rgba(206, 60, 73, 0.4);
+  filter: drop-shadow(0 12px 30px rgba(206, 60, 73, 0.45));
+}
+
+.dashEmptyBadge svg {
+  display: block;
 }
 
 .dashEmpty h1 {
